@@ -8,7 +8,7 @@
       </b-row>
       <b-row align-h="center">
         <b-col>
-          <span>{{countries[0]}}</span>
+          <span>{{fetchRandomCountry}}</span>
         </b-col>
       </b-row>
     </b-container>
@@ -19,10 +19,18 @@
 import CountryTool from "./../controllers/country";
 export default {
   name: "Canvas",
-  data() {
+  data: function() {
     return {
       countries: CountryTool.fetchCountries()
     };
+  },
+  computed: {
+    fetchRandomCountry: function() {
+      CountryTool.fetchCountries().then(function(list) {
+        console.log({ list: list.data });
+        return list[0];
+      });
+    }
   }
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-container fluid>
+    <b-container>
       <!-- content -->
       <b-row>
         <b-col>
@@ -9,9 +9,13 @@
       </b-row>
 
       <!-- navigation bar -->
-      <b-row id="navigation">
-        <b-col cols="2" class="nav-item">
-          <p>Gissa</p>
+      <b-row>
+        <b-col>
+          <nav id="navigation">
+            <ul>
+              <li>clutter</li>
+            </ul>
+          </nav>
         </b-col>
       </b-row>
     </b-container>
@@ -34,18 +38,23 @@ export default {
   margin-top: 60px;
 }
 
+#content {
+  height: 90vh;
+  width: 100vw;
+}
+
 #navigation {
   position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 100vw;
+  color: white;
   background-color: #333;
+
+  display: flex;
 }
 
-#navigation .nav-item {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+#navigation li {
+  list-style-type: none;
+  margin: 0 2vw;
 }
 </style>

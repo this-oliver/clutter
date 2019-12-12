@@ -9,8 +9,7 @@ var regionBaseUrl = "https://restcountries.eu/rest/v2/region/";
  */
 const fetchAllCountries = function () {
   return axios.get(countryUrl).then(function (response) {
-    console.log(response);
-    return response;
+    return response.data;
   });
 }
 
@@ -19,8 +18,7 @@ const fetchAllCountries = function () {
  */
 const fetchEuropeanCountries = function () {
   return axios.get(regionBaseUrl + "europe").then(function (response) {
-    console.log(response);
-    return response;
+    return response.data;
   });
 }
 
@@ -29,8 +27,7 @@ const fetchEuropeanCountries = function () {
  */
 const fetchAfricanCountries = function () {
   return axios.get(regionBaseUrl + "africa").then(function (response) {
-    console.log(response);
-    return response;
+    return response.data;
   });
 }
 
@@ -39,8 +36,7 @@ const fetchAfricanCountries = function () {
  */
 const fetchAsianCountries = function () {
   return axios.get(regionBaseUrl + "asia").then(function (response) {
-    console.log(response);
-    return response;
+    return response.data;
   });
 }
 
@@ -49,8 +45,7 @@ const fetchAsianCountries = function () {
  */
 const fetchAmericasCountries = function () {
   return axios.get(regionBaseUrl + "americas").then(function (response) {
-    console.log(response);
-    return response;
+    return response.data;
   });
 }
 
@@ -59,8 +54,7 @@ const fetchAmericasCountries = function () {
  */
 const fetchOceaniaCountries = function () {
   return axios.get(regionBaseUrl + "oceania").then(function (response) {
-    console.log(response);
-    return response;
+    return response.data;
   });
 }
 
@@ -86,6 +80,5 @@ const fetchCountries = function (region) {
 }
 
 export default {
-  fetchCountries,
-  fetchEuropeanCountries
+  fetchCountries
 };
