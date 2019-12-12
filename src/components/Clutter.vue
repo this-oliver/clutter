@@ -8,7 +8,8 @@
       </b-row>
       <b-row align-h="center">
         <b-col>
-          <span>{{fetchRandomCountry}}</span>
+          <p>{{country}}</p>
+          <b-button @click="fetchRandomCountry">clutter</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -21,17 +22,19 @@ export default {
   name: "Canvas",
   data: function() {
     return {
-      countries: CountryTool.fetchCountries()
+      country: ""
     };
   },
-  computed: {
+  methods: {
     fetchRandomCountry: function() {
+      var component = this;
       CountryTool.fetchCountries().then(function(list) {
-        console.log({ list: list.data });
-        return list[0];
+        console.log({ name: list[0].name });
+        component.country = list[0].name;
       });
     }
-  }
+  },
+  mounted: function() {}
 };
 </script>
 
