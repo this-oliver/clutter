@@ -6,17 +6,10 @@ const scrambleWord = function (word) {
   }
 
   var length = word.length;
-  var temp = word.split("");
+  var letters = word.split("");
   var res = new Array(length);
 
-  console.log({
-    word: word,
-    length: length,
-    temp_word: temp,
-    res_array: res
-  })
-
-  temp.forEach(letter => {
+  letters.forEach(letter => {
     var randomNum;
     var spotFilled = false;
     do {
@@ -26,13 +19,7 @@ const scrambleWord = function (word) {
         spotFilled = true;
       }
     } while (spotFilled == false);
-
-    console.log({
-      character: letter,
-      randomNum: randomNum
-    })
   });
-
   return res.join('').toLowerCase();
 }
 
