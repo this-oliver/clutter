@@ -1,5 +1,5 @@
 /* jshint esversion: 2015 */
-const scrambleWord = function (word) {
+const clutterWord = function (word) {
   if (typeof word !== "string") {
     console.log(typeof word);
     return null;
@@ -27,8 +27,7 @@ const randomNumber = function (from, to) {
   return (Math.round(Math.random() * to) + from);
 }
 
-console.log(scrambleWord("oliver"));
-
-// export default {
-//   scrambleWord
-// };
+export default {
+  clutterWord,
+  randomNumber
+};

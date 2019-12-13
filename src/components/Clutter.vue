@@ -1,15 +1,21 @@
 <template>
   <div>
     <b-container>
-      <b-row align-h="center">
+      <b-row>
         <b-col>
           <span>timer</span>
         </b-col>
       </b-row>
-      <b-row align-h="center">
-        <b-col>
-          <p>{{country}}</p>
-          <b-button @click="fetchRandomCountry">clutter</b-button>
+      <b-row>
+        <b-col cols="12">
+          <b-button variant="success" @click="fetchRandomCountry">clutter</b-button>
+          <span>{{clutteredCountry}}</span>
+        </b-col>
+        <b-col cols="12">
+          <span>
+            <b-button @click="hint=!hint">hint</b-button>
+            <p v-if="hint == true">{{country}}</p>
+          </span>
         </b-col>
       </b-row>
     </b-container>
@@ -17,20 +23,25 @@
 </template>
 
 <script>
-import CountryTool from "./../controllers/country";
+import CountryTool from "./../controllers/Country";
+import ClutterTool from "./../helpers/Clutter";
 export default {
   name: "Canvas",
   data: function() {
     return {
-      country: ""
+      country: "",
+      clutteredCountry: "",
+      hint: false
     };
   },
   methods: {
     fetchRandomCountry: function() {
       var component = this;
       CountryTool.fetchCountries().then(function(list) {
-        console.log({ name: list[0].name });
-        component.country = list[0].name;
+        var country = list[ClutterTool.randomNumber(0, list.length)].name;
+        var clutteredCountry = ClutterTool.clutterWord(country);
+        component.country = country;
+        component.clutteredCountry = clutteredCountry;
       });
     }
   },
