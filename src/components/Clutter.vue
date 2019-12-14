@@ -3,12 +3,12 @@
     <b-container fluid>
       <!-- timer -->
       <b-row class="justify-content-md-center" id="scoreboard">
-        <b-col cols="4" id="score">
+        <b-col v-if="gameStarted" cols="4" id="score">
           <p>Score[ {{score}} ]</p>
         </b-col>
         <b-col cols="8" id="timer">
           <p v-if="this.gameStarted == true">{{showTime}}</p>
-          <p v-else>{{timer}} seconds</p>
+          <p v-else>Countdown</p>
         </b-col>
       </b-row>
       <!-- word -->
@@ -19,16 +19,20 @@
           </b-row>
           <b-row id="hint" v-if="hint">
             <b-col>
-              <b-col>{{country}}</b-col>
+              <b-col>{{hintText}}</b-col>
             </b-col>
           </b-row>
           <b-row id="input" v-if="gameStarted">
             <b-col>
               <b-input-group>
-                <b-input-group-text>Take a Guess</b-input-group-text>
-                <b-form-input size="lg" v-bind="this.userInput"></b-form-input>
+                <b-form-input size="lg" v-model="userInput"></b-form-input>
                 <b-input-group-append>
-                  <b-button size="lg" text="Button" variant="success" @click="checkAnswer">Guess</b-button>
+                  <b-button
+                    size="lg"
+                    text="Button"
+                    variant="success"
+                    @click="checkAnswer"
+                  >Take a Guess</b-button>
                 </b-input-group-append>
               </b-input-group>
             </b-col>
@@ -63,12 +67,17 @@ export default {
       clutteredCountry: "clutter",
       //game state
       gameStarted: false,
+      gameFinished: false,
       userInput: "",
+      mistakes: 0,
       hint: false,
+      hintText: "",
+      timerObject: null,
       //game rules
       score: 0,
       timer: 60,
-      gameTime: 60
+      gameTime: 60,
+      maxMistakes: 0
     };
   },
   computed: {
@@ -86,7 +95,9 @@ export default {
       this.country = "clutter";
       this.clutteredCountry = "clutter";
       this.gameStarted = false;
+      this.gameFinished = false;
       this.timer = this.gameTime;
+      clearInterval(this.timerObject);
       this.score = 0;
     },
     checkAnswer: function() {
@@ -97,15 +108,35 @@ export default {
         this.score++;
         this.userInput = "";
         this.fetchRandomCountry();
-        console.log("correct");
       } else {
-        console.log("not correct");
+        this.score--;
+        this.mistakes++;
+        this.userInput = "";
+
+        if (mistakes == maxMistakes) {
+          this.mistakes = 0;
+          this.fetchRandomCountry();
+        }
       }
-      console.log("checking answer: " + this.score);
     },
     giveHint: function() {
       if (this.hint == false) {
         this.hint = true;
+        this.hintText = "";
+        for (let i = 0; i < this.country.length; i++) {
+          var char = this.country[i].toLowerCase();
+          if (
+            char == "a" ||
+            char == "e" ||
+            char == "i" ||
+            char == "o" ||
+            char == "u"
+          ) {
+            this.hintText += ".";
+          } else {
+            this.hintText += char;
+          }
+        }
         setTimeout(this.giveHint, 500);
       } else {
         this.hint = false;
@@ -113,11 +144,10 @@ export default {
     },
     startTimer: function() {
       var component = this;
-      var timerObject = setInterval(function() {
+      this.timerObject = setInterval(function() {
         component.timer--;
         if (component.timer < 0) {
           clearInterval(timerObject);
-          component.timer = component.gameTime;
         }
       }, 1000);
     },
@@ -126,7 +156,7 @@ export default {
       CountryController.fetchCountries().then(function(list) {
         var country = list[ClutterTool.randomNumber(0, list.length)].name;
         var clutteredCountry = ClutterTool.clutter(country);
-        component.country = country;
+        component.country = new String(country);
         component.clutteredCountry = clutteredCountry;
       });
     }
