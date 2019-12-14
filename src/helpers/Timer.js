@@ -1,5 +1,8 @@
 /* jshint esversion: 2015 */
 
+/**
+ * @returns {Date} returns current time
+ */
 const getCurrentTime = function () {
   return new Date();
 }
