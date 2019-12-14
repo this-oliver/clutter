@@ -1,24 +1,20 @@
 <template>
   <div id="app">
-    <b-container>
+    <b-container fluid>
       <!-- content -->
       <b-row>
         <b-col>
-          <router-view />
-        </b-col>
-      </b-row>
-
-      <!-- navigation bar -->
-      <b-row>
-        <b-col>
-          <nav id="navigation">
-            <ul>
-              <li>clutter</li>
-            </ul>
-          </nav>
+          <router-view id="content" />
         </b-col>
       </b-row>
     </b-container>
+    <!-- navigation bar -->
+    <nav id="navigation">
+      <ul>
+        <li>clutter</li>
+        <li>high score</li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -33,9 +29,7 @@ export default {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background: #60a358;
 }
 
 #content {
@@ -47,14 +41,14 @@ export default {
   position: fixed;
   bottom: 0;
   width: 100vw;
+  height: 10vh;
   color: white;
-  background-color: #333;
-
-  display: flex;
+  background-color: rgb(0, 0, 0);
 }
 
 #navigation li {
   list-style-type: none;
   margin: 0 2vw;
+  float: left;
 }
 </style>

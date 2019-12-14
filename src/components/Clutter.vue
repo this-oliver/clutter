@@ -1,23 +1,16 @@
 <template>
   <div>
-    <b-container>
-      <b-row>
+    <b-container fluid>
+      <!-- timer -->
+      <b-row class="justify-content-md-center">
         <b-col>
-          <span>timer</span>
+          <p>{{timer}}</p>
         </b-col>
       </b-row>
-      <b-row>
-        <b-col cols="12">
-          <b-button variant="success" @click="fetchRandomCountry">clutter</b-button>
-          <span>{{clutteredCountry}}</span>
-        </b-col>
-        <b-col cols="12">
-          <span>
-            <b-button @click="hint=!hint">hint</b-button>
-            <p v-if="hint == true">{{country}}</p>
-          </span>
-        </b-col>
-      </b-row>
+      <!-- word -->
+      <b-row></b-row>
+      <!-- buttons -->
+      <b-row></b-row>
     </b-container>
   </div>
 </template>
@@ -31,7 +24,8 @@ export default {
     return {
       country: "",
       clutteredCountry: "",
-      hint: false
+      hint: false,
+      timer: ""
     };
   },
   methods: {
@@ -39,13 +33,15 @@ export default {
       var component = this;
       CountryTool.fetchCountries().then(function(list) {
         var country = list[ClutterTool.randomNumber(0, list.length)].name;
-        var clutteredCountry = ClutterTool.clutterWord(country);
+        var clutteredCountry = ClutterTool.clutter(country);
         component.country = country;
         component.clutteredCountry = clutteredCountry;
       });
     }
   },
-  mounted: function() {}
+  mounted: function() {
+    this.fetchRandomCountry();
+  }
 };
 </script>
 
