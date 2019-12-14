@@ -8,9 +8,6 @@
 const clutter = function (text) {
   var result = "";
   var words = text.split(" ");
-  console.log({
-    word: words
-  })
 
   words.forEach((word, index) => {
     var string = "";
@@ -77,9 +74,8 @@ const scramble = function (string) {
 const randomNumber = function (from, to) {
   return (Math.round(Math.random() * to) + from);
 }
-console.log("test");
-console.log("result: " + clutter("brooklyn (NY) (New York)"));
-// export default {
-//   clutter,
-//   randomNumber
-// };
+
+export default {
+  clutter,
+  randomNumber
+};
