@@ -1,4 +1,4 @@
-# gissa
+# clutter
 
 > a word guessing game
 
