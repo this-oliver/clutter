@@ -25,7 +25,12 @@
           <b-row id="input" v-if="gameStarted">
             <b-col>
               <b-input-group>
-                <b-form-input size="lg" :disabled="gameFinished" v-model="userInput"></b-form-input>
+                <b-form-input
+                  size="lg"
+                  :disabled="gameFinished"
+                  v-model="userInput"
+                  v-on:keyup.enter="checkAnswer"
+                ></b-form-input>
                 <b-input-group-append>
                   <b-button
                     size="lg"
@@ -45,7 +50,10 @@
           <b-button-toolbar>
             <b-button-group>
               <b-button variant="primary" :disabled="gameStarted" @click="startGame" size="lg">Start</b-button>
-              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">Hint</b-button>
+              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">
+                Hint
+                <b-badge variant="light">{{hintsLeft}}</b-badge>
+              </b-button>
               <b-button variant="danger" v-if="gameStarted" @click="restart" size="lg">Restart</b-button>
             </b-button-group>
           </b-button-toolbar>
@@ -71,13 +79,15 @@ export default {
       userInput: "",
       mistakes: 0,
       hint: false,
+      hintsLeft: 3,
       hintText: "",
       timerObject: null,
       //game rules
       score: 0,
-      timer: 10,
+      timer: 60,
       gameTime: 60,
-      maxMistakes: 0
+      maxMistakes: 0,
+      maxHints: 3
     };
   },
   computed: {
@@ -92,13 +102,17 @@ export default {
       this.startTimer();
     },
     restart: function() {
+      //words
       this.country = "clutter";
       this.clutteredCountry = "clutter";
+      //game state
+      this.score = 0;
+      this.mistakes = this.maxMistakes;
+      this.hintsLeft = this.maxHints;
       this.gameStarted = false;
       this.gameFinished = false;
       this.timer = this.gameTime;
       clearInterval(this.timerObject);
-      this.score = 0;
     },
     checkAnswer: function() {
       if (
@@ -121,6 +135,11 @@ export default {
     },
     giveHint: function() {
       if (this.hint == false) {
+        if (this.hintsLeft == 0) {
+          return;
+        } else {
+          this.hintsLeft--;
+        }
         this.hint = true;
         this.hintText = "";
         for (let i = 0; i < this.country.length; i++) {
