@@ -194,6 +194,7 @@ export default {
         component.timer--;
         if (component.timer == 0) {
           clearInterval(component.timerObject);
+          component.totalIncorrectWords.push(component.country);
           component.gameFinished = true;
         }
       }, 1000);
