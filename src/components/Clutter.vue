@@ -109,7 +109,7 @@ export default {
       totalIncorrectWords: [],
       mistakes: 0,
       //game rules
-      timer: 10,
+      timer: 60,
       gameTime: 10,
       maxMistakes: 3
     };
