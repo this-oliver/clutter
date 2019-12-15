@@ -40,6 +40,15 @@
                     @click="checkAnswer"
                   >Take a Guess</b-button>
                 </b-input-group-append>
+                <b-input-group-append>
+                  <b-button
+                    size="lg"
+                    text="Button"
+                    variant="warning"
+                    :disabled="gameFinished"
+                    @click="skipAnswer"
+                  >Skip</b-button>
+                </b-input-group-append>
               </b-input-group>
             </b-col>
           </b-row>
@@ -154,10 +163,17 @@ export default {
         if (this.mistakes % this.maxMistakes == 0) {
           this.totalIncorrectWords.push(this.country);
           this.fetchRandomCountry();
-          if (this.score < 0) {
-            this.score--;
-          }
+          this.decreaseScore();
         }
+      }
+    },
+    skipAnswer: function() {
+      this.decreaseScore();
+      this.fetchRandomCountry();
+    },
+    decreaseScore: function() {
+      if (this.score < 0) {
+        this.score--;
       }
     },
     giveHint: function() {
