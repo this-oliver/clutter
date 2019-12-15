@@ -10,10 +10,7 @@
     </b-container>
     <!-- navigation bar -->
     <nav id="navigation">
-      <ul>
-        <li>clutter</li>
-        <li>high score</li>
-      </ul>
+      <ul></ul>
     </nav>
   </div>
 </template>
