@@ -25,14 +25,29 @@
           <b-row id="input" v-if="gameStarted">
             <b-col>
               <b-input-group>
-                <b-form-input size="lg" v-model="userInput"></b-form-input>
+                <b-form-input
+                  size="lg"
+                  :disabled="gameFinished"
+                  v-model="userInput"
+                  v-on:keyup.enter="checkAnswer"
+                ></b-form-input>
                 <b-input-group-append>
                   <b-button
                     size="lg"
                     text="Button"
                     variant="success"
+                    :disabled="gameFinished"
                     @click="checkAnswer"
                   >Take a Guess</b-button>
+                </b-input-group-append>
+                <b-input-group-append>
+                  <b-button
+                    size="lg"
+                    text="Button"
+                    variant="warning"
+                    :disabled="gameFinished"
+                    @click="skipAnswer"
+                  >Skip</b-button>
                 </b-input-group-append>
               </b-input-group>
             </b-col>
@@ -45,10 +60,25 @@
           <b-button-toolbar>
             <b-button-group>
               <b-button variant="primary" :disabled="gameStarted" @click="startGame" size="lg">Start</b-button>
-              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">Hint</b-button>
+              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">
+                Hint
+                <b-badge variant="light">{{hintsLeft}}</b-badge>
+              </b-button>
               <b-button variant="danger" v-if="gameStarted" @click="restart" size="lg">Restart</b-button>
             </b-button-group>
           </b-button-toolbar>
+        </b-col>
+      </b-row>
+      <!-- scoreboard -->
+      <b-row class="justify-content-md-center" id="scoreboard">
+        <b-col>
+          <Scoreboard
+            :totalScore="this.score"
+            :totalWords="this.totalWords.length"
+            :totalCorrectWords="this.totalCorrectWords"
+            :totalIncorrectWords="this.totalIncorrectWords"
+            :gameFinished="this.gameFinished"
+          />
         </b-col>
       </b-row>
     </b-container>
@@ -56,10 +86,18 @@
 </template>
 
 <script>
+//tools
 import CountryController from "./../controllers/Country";
 import ClutterTool from "./../helpers/Clutter";
+
+//components
+import Scoreboard from "./ScoreBoard";
+
 export default {
   name: "Canvas",
+  components: {
+    Scoreboard
+  },
   data: function() {
     return {
       //word related
@@ -68,16 +106,21 @@ export default {
       //game state
       gameStarted: false,
       gameFinished: false,
-      userInput: "",
-      mistakes: 0,
       hint: false,
+      hintsLeft: 3,
       hintText: "",
       timerObject: null,
-      //game rules
+      //user
       score: 0,
+      userInput: "",
+      totalWords: [],
+      totalCorrectWords: [],
+      totalIncorrectWords: [],
+      mistakes: 0,
+      //game rules
       timer: 60,
-      gameTime: 60,
-      maxMistakes: 0
+      gameTime: 10,
+      maxMistakes: 3
     };
   },
   computed: {
@@ -92,13 +135,18 @@ export default {
       this.startTimer();
     },
     restart: function() {
+      //country
       this.country = "clutter";
       this.clutteredCountry = "clutter";
+      this.totalWords = [];
+      //user
+      this.score = 0;
+      this.mistakes = 0;
+      this.userInput = "";
+      //state
       this.gameStarted = false;
       this.gameFinished = false;
       this.timer = this.gameTime;
-      clearInterval(this.timerObject);
-      this.score = 0;
     },
     checkAnswer: function() {
       if (
@@ -107,20 +155,34 @@ export default {
       ) {
         this.score++;
         this.userInput = "";
+        this.totalCorrectWords.push(this.country);
         this.fetchRandomCountry();
       } else {
-        this.score--;
         this.mistakes++;
         this.userInput = "";
-
-        if (mistakes == maxMistakes) {
-          this.mistakes = 0;
+        if (this.mistakes % this.maxMistakes == 0) {
+          this.totalIncorrectWords.push(this.country);
           this.fetchRandomCountry();
+          this.decreaseScore();
         }
+      }
+    },
+    skipAnswer: function() {
+      this.decreaseScore();
+      this.fetchRandomCountry();
+    },
+    decreaseScore: function() {
+      if (this.score < 0) {
+        this.score--;
       }
     },
     giveHint: function() {
       if (this.hint == false) {
+        if (this.hintsLeft == 0) {
+          return;
+        } else {
+          this.hintsLeft--;
+        }
         this.hint = true;
         this.hintText = "";
         for (let i = 0; i < this.country.length; i++) {
@@ -146,8 +208,10 @@ export default {
       var component = this;
       this.timerObject = setInterval(function() {
         component.timer--;
-        if (component.timer < 0) {
-          clearInterval(timerObject);
+        if (component.timer == 0) {
+          clearInterval(component.timerObject);
+          component.totalIncorrectWords.push(component.country);
+          component.gameFinished = true;
         }
       }, 1000);
     },
@@ -156,8 +220,9 @@ export default {
       CountryController.fetchCountries().then(function(list) {
         var country = list[ClutterTool.randomNumber(0, list.length)].name;
         var clutteredCountry = ClutterTool.clutter(country);
-        component.country = new String(country);
+        component.country = country;
         component.clutteredCountry = clutteredCountry;
+        component.totalWords.push(country);
       });
     }
   }
