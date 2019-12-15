@@ -2,6 +2,8 @@
 
 > a word guessing game
 
+[Play](https://olivermanzi.github.io/clutter/) :video_game:
+
 ## Game Rules
 
 1. A correct guess is +1 point
