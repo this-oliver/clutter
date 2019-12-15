@@ -2,9 +2,25 @@
 
 > a word guessing game
 
+## Game Rules
+
+1. A correct guess is +1 point
+2. An incorrect guess is -1 point
+3. You have 60 seconds to guess as many times as you possibly can
+4. Hints provides you with the final solution. The catch is that all the vowels are removed
+5. You only have 5 hints
+6. Restarting the game resets all acheivements
+
+## Future Improvements
+
+1. Scoreboard system
+2. Interactive UI
+3. Better Input Management
+4. More categories for guessing (e.g. vine quotes, movies, music)
+
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
