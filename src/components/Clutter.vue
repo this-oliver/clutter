@@ -25,7 +25,12 @@
           <b-row id="input" v-if="gameStarted">
             <b-col>
               <b-input-group>
-                <b-form-input size="lg" :disabled="gameFinished" v-model="userInput"></b-form-input>
+                <b-form-input
+                  size="lg"
+                  :disabled="gameFinished"
+                  v-model="userInput"
+                  v-on:keyup.enter="checkAnswer"
+                ></b-form-input>
                 <b-input-group-append>
                   <b-button
                     size="lg"
@@ -46,7 +51,10 @@
           <b-button-toolbar>
             <b-button-group>
               <b-button variant="primary" :disabled="gameStarted" @click="startGame" size="lg">Start</b-button>
-              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">Hint</b-button>
+              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">
+                Hint
+                <b-badge variant="light">{{hintsLeft}}</b-badge>
+              </b-button>
               <b-button variant="danger" v-if="gameStarted" @click="restart" size="lg">Restart</b-button>
             </b-button-group>
           </b-button-toolbar>
@@ -90,6 +98,7 @@ export default {
       gameStarted: false,
       gameFinished: false,
       hint: false,
+      hintsLeft: 3,
       hintText: "",
       timerObject: null,
       //user
@@ -153,6 +162,11 @@ export default {
     },
     giveHint: function() {
       if (this.hint == false) {
+        if (this.hintsLeft == 0) {
+          return;
+        } else {
+          this.hintsLeft--;
+        }
         this.hint = true;
         this.hintText = "";
         for (let i = 0; i < this.country.length; i++) {
