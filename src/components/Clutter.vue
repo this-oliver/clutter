@@ -25,7 +25,7 @@
           <b-row id="input" v-if="gameStarted">
             <b-col>
               <b-input-group>
-                <b-form-input size="lg" v-model="userInput"></b-form-input>
+                <b-form-input size="lg" :disabled="gameFinished" v-model="userInput"></b-form-input>
                 <b-input-group-append>
                   <b-button
                     size="lg"
@@ -75,7 +75,7 @@ export default {
       timerObject: null,
       //game rules
       score: 0,
-      timer: 60,
+      timer: 10,
       gameTime: 60,
       maxMistakes: 0
     };
@@ -146,8 +146,9 @@ export default {
       var component = this;
       this.timerObject = setInterval(function() {
         component.timer--;
-        if (component.timer < 0) {
-          clearInterval(timerObject);
+        if (component.timer == 0) {
+          clearInterval(component.timerObject);
+          component.gameFinished = true;
         }
       }, 1000);
     },
