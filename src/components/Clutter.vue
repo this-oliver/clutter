@@ -44,9 +44,9 @@
         <b-col>
           <b-button-toolbar>
             <b-button-group>
-              <b-button variant="primary" :disabled="gameStarted" @click="startGame">Start</b-button>
-              <b-button variant="warning" v-if="gameStarted" @click="giveHint">Hint</b-button>
-              <b-button variant="danger" v-if="gameStarted" @click="restart">Restart</b-button>
+              <b-button variant="primary" :disabled="gameStarted" @click="startGame" size="lg">Start</b-button>
+              <b-button variant="warning" v-if="gameStarted" @click="giveHint" size="lg">Hint</b-button>
+              <b-button variant="danger" v-if="gameStarted" @click="restart" size="lg">Restart</b-button>
             </b-button-group>
           </b-button-toolbar>
         </b-col>
@@ -172,7 +172,7 @@ export default {
 }
 
 #timer {
-  text-align: left;
+  text-align: center;
   font-size: 4em;
   font-weight: bold;
 }
