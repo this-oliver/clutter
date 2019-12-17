@@ -158,7 +158,7 @@ export default {
       mistakes: 0,
       //game rules
       timer: 60,
-      gameTime: 10,
+      gameTime: 60,
       maxMistakes: 3,
       //other
       screenSize: { width: screen.width, height: screen.height }
@@ -194,7 +194,6 @@ export default {
         component.timer--;
         if (component.timer == 0) {
           clearInterval(component.timerObject);
-          component.totalIncorrectWords.push(component.country);
           component.gameFinished = true;
         }
       }, 1000);
@@ -228,6 +227,7 @@ export default {
       this.gameStarted = false;
       this.gameFinished = false;
       this.timer = this.gameTime;
+      clearInterval(this.timerObject);
     },
     checkAnswer: function() {
       if (
@@ -250,6 +250,7 @@ export default {
     },
     skipAnswer: function() {
       this.decreaseScore();
+      this.totalIncorrectWords.push(this.country);
       this.fetchRandomCountry();
     },
     giveHint: function() {
