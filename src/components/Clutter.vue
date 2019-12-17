@@ -228,11 +228,11 @@ export default {
       this.score = 0;
       this.mistakes = 0;
       this.userInput = "";
-      (this.totalWords = []),
-        (this.totalCorrectWords = []),
-        (this.totalIncorrectWords = []),
-        //state
-        (this.gameStarted = false);
+      this.totalWords = [];
+      this.totalCorrectWords = [];
+      this.totalIncorrectWords = [];
+      //state
+      this.gameStarted = false;
       this.gameFinished = false;
       this.timer = this.gameTime;
       clearInterval(this.timerObject);
