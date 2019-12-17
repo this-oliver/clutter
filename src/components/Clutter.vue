@@ -250,6 +250,7 @@ export default {
     },
     skipAnswer: function() {
       this.decreaseScore();
+      this.totalIncorrectWords.push(this.country);
       this.fetchRandomCountry();
     },
     giveHint: function() {

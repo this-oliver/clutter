@@ -25,7 +25,7 @@
                   <b-col cols="2" id="totalWords">
                     Accuracy
                     <hr />
-                    {{(totalScore/totalWords)*100}}%
+                    {{getUserAccuracy}}%
                   </b-col>
                   <b-col cols="6" offset="1" id="totalIncorrectWords">
                     Missed words
@@ -66,6 +66,9 @@ export default {
     "gameFinished"
   ],
   computed: {
+    getUserAccuracy: function() {
+      return Math.ceil((this.totalScore / this.totalWords) * 100);
+    },
     getScreenSize: function() {
       var size = this.screenSize.width;
       var res = "";
