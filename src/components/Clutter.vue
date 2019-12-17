@@ -298,7 +298,7 @@ export default {
 /* scoreboard */
 #scoreboard {
   margin-top: 10vh;
-  padding: 2vh 2vw;
+  padding: 1vh 1vw;
 }
 
 #timer {
@@ -315,7 +315,7 @@ export default {
 /* word */
 #word {
   margin-top: 10vh;
-  padding: 2vh 2vw;
+  padding: 1vh 1vw;
 
   font-size: 5em;
 }
@@ -330,7 +330,7 @@ export default {
 /* options */
 #buttons {
   margin-top: 10vh;
-  padding: 2vh 2vw;
+  padding: 1vh 1vw;
 }
 
 @media only screen and (max-width: 600px) {
