@@ -2,13 +2,13 @@
   <div>
     <b-container fluid>
       <!-- timer -->
-      <b-row class="justify-content-md-center" id="scoreboard">
-        <b-col v-if="gameStarted" cols="4" id="score">
-          <p>Score[ {{score}} ]</p>
-        </b-col>
+      <b-row id="scoreboard">
         <b-col cols="8" id="timer">
-          <p v-if="this.gameStarted == true">{{showTime}}</p>
-          <p v-else>Countdown</p>
+          <p v-if="this.gameStarted != true">Countdown</p>
+          <p v-else>&#9201; {{showTime}}</p>
+        </b-col>
+        <b-col v-if="gameStarted" cols="4" id="score">
+          <p>{{score}} &#127941;</p>
         </b-col>
       </b-row>
       <!-- word -->
@@ -125,7 +125,7 @@ export default {
   },
   computed: {
     showTime: function() {
-      return this.timer + " secs";
+      return this.timer;
     }
   },
   methods: {
@@ -232,34 +232,46 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #scoreboard {
-  height: 20vh;
-  padding: 5vh 5vw;
+  margin-top: 10vh;
+  padding: 2vh 2vw;
 }
 
 #timer {
-  text-align: center;
-  font-size: 4em;
   font-weight: bold;
+  font-size: 4em;
 }
 
 #score {
-  color: yellow;
-  text-align: left;
-  font-weight: 700;
-  font-size: 2em;
+  font-weight: bold;
+  font-size: 4em;
+  text-align: end;
 }
 
 #word {
-  height: 50vh;
-  padding: 5vh 5vw;
+  margin-top: 10vh;
+  padding: 2vh 2vw;
 
-  text-align: center;
   font-size: 5em;
 }
-#buttons {
-  height: 20vh;
-  padding: 5vh 5vw;
 
-  text-align: center;
+#buttons {
+  margin-top: 10vh;
+  padding: 2vh 2vw;
+}
+
+@media only screen and (max-width: 600px) {
+  #timer {
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  #score {
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  #word {
+    font-size: 2.5em;
+  }
 }
 </style>
