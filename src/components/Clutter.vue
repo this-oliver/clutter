@@ -35,26 +35,24 @@
                       v-model="userInput"
                       v-on:keyup.enter="checkAnswer"
                     ></b-form-input>
-                    <div v-if="this.getScreenSize == 'lg'">
-                      <b-input-group-append>
-                        <b-button
-                          :size="this.getScreenSize"
-                          text="Button"
-                          variant="success"
-                          :disabled="gameFinished"
-                          @click="checkAnswer"
-                        >Take a Guess</b-button>
-                      </b-input-group-append>
-                      <b-input-group-append>
-                        <b-button
-                          :size="this.getScreenSize"
-                          text="Button"
-                          variant="warning"
-                          :disabled="gameFinished"
-                          @click="skipAnswer"
-                        >Skip</b-button>
-                      </b-input-group-append>
-                    </div>
+                    <b-input-group-append v-if="this.getScreenSize == 'lg'">
+                      <b-button
+                        :size="this.getScreenSize"
+                        text="Button"
+                        variant="success"
+                        :disabled="gameFinished"
+                        @click="checkAnswer"
+                      >Take a Guess</b-button>
+                    </b-input-group-append>
+                    <b-input-group-append v-if="this.getScreenSize == 'lg'">
+                      <b-button
+                        :size="this.getScreenSize"
+                        text="Button"
+                        variant="warning"
+                        :disabled="gameFinished"
+                        @click="skipAnswer"
+                      >Skip</b-button>
+                    </b-input-group-append>
                   </b-input-group>
                   <b-form-group v-if="this.getScreenSize != 'lg'" label-cols-sm="12">
                     <b-button-group>
