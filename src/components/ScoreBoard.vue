@@ -5,7 +5,7 @@
         <b-col>
           <b-modal
             id="scoreboard"
-            size="lg"
+            :size="this.getScreenSize"
             :header-bg-variant="headerBgVariant"
             :header-text-variant="headerTextVariant"
             :body-bg-variant="bodyBgVariant"
@@ -17,18 +17,18 @@
             <b-media-body>
               <b-container fluid>
                 <b-row>
-                  <b-col cols="4" id="totalCorrectWords">
-                    Total Correct Words Guessed
-                    <hr />
-                    {{totalScore}}
-                  </b-col>
-                  <b-col cols="4" id="totalWords">
-                    Stats
+                  <b-col cols="2" id="totalCorrectWords">
+                    Total
                     <hr />
                     {{totalScore}}/{{totalWords}}
                   </b-col>
-                  <b-col cols="4" id="totalIncorrectWords">
-                    Words that you got wrong
+                  <b-col cols="2" id="totalWords">
+                    Accuracy
+                    <hr />
+                    {{getUserAccuracy}}%
+                  </b-col>
+                  <b-col cols="6" offset="1" id="totalIncorrectWords">
+                    Missed words
                     <hr />
                     <ol>
                       <li v-for="word in totalIncorrectWords" :key="word">{{word}}</li>
@@ -54,7 +54,8 @@ export default {
       bodyBgVariant: "dark",
       bodyTextVariant: "light",
       footerBgVariant: "dark",
-      footerTextVariant: "light"
+      footerTextVariant: "light",
+      screenSize: { width: screen.width, height: screen.height }
     };
   },
   props: [
@@ -63,7 +64,33 @@ export default {
     "totalCorrectWords",
     "totalIncorrectWords",
     "gameFinished"
-  ]
+  ],
+  computed: {
+    getUserAccuracy: function() {
+      return Math.ceil((this.totalScore / this.totalWords) * 100);
+    },
+    getScreenSize: function() {
+      var size = this.screenSize.width;
+      var res = "";
+      if (size <= 350) {
+        res = "sm";
+      } else if (350 < size && size <= 450) {
+        res = "md";
+      } else {
+        res = "lg";
+      }
+      return res;
+    }
+  },
+  methods: {
+    //other
+    fetchScreenSize: function() {
+      this.screenSize = { width: screen.width, height: screen.height };
+    }
+  },
+  beforeMount: function() {
+    this.fetchScreenSize();
+  }
 };
 </script>
 
