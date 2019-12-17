@@ -63,6 +63,30 @@ const scramble = function (string) {
     } while (spotFilled == false);
   });
   return res.join("");
+};
+
+/**
+ * 
+ * @param {String} string 
+ * @returns {String} string without brackets (or their contents)
+ */
+const removeBrackets = function (string) {
+  var res = "";
+  var inBracket = false;
+  for (var i = 0; i < string.length; i++) {
+
+    if (string[i] == "(") {
+      inBracket = true;
+      res = res.slice(0, res.length - 1);
+    } else if (string[i] == ")") {
+      inBracket = false;
+    } else {
+      if (inBracket == false) {
+        res += string[i];
+      }
+    }
+  }
+  return res.trim();
 }
 
 /**
@@ -73,9 +97,10 @@ const scramble = function (string) {
  */
 const randomNumber = function (from, to) {
   return (Math.round(Math.random() * to) + from);
-}
+};
 
 export default {
   clutter,
+  removeBrackets,
   randomNumber
 };
