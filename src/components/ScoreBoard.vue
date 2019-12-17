@@ -76,7 +76,6 @@ export default {
       } else {
         res = "lg";
       }
-      console.log(res);
       return res;
     }
   },
@@ -84,7 +83,6 @@ export default {
     //other
     fetchScreenSize: function() {
       this.screenSize = { width: screen.width, height: screen.height };
-      console.log(this.screenSize.width);
     }
   },
   beforeMount: function() {
