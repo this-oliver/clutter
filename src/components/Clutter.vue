@@ -228,8 +228,11 @@ export default {
       this.score = 0;
       this.mistakes = 0;
       this.userInput = "";
-      //state
-      this.gameStarted = false;
+      (this.totalWords = []),
+        (this.totalCorrectWords = []),
+        (this.totalIncorrectWords = []),
+        //state
+        (this.gameStarted = false);
       this.gameFinished = false;
       this.timer = this.gameTime;
       clearInterval(this.timerObject);
@@ -254,8 +257,9 @@ export default {
       }
     },
     skipAnswer: function() {
-      this.decreaseScore();
       this.totalIncorrectWords.push(this.country);
+      this.userInput = "";
+      this.decreaseScore();
       this.fetchRandomCountry();
     },
     giveHint: function() {
