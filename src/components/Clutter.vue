@@ -201,8 +201,13 @@ export default {
     fetchRandomCountry: function() {
       var component = this;
       CountryController.fetchCountries().then(function(list) {
-        var country = list[ClutterTool.randomNumber(0, list.length)].name;
-        var clutteredCountry = ClutterTool.clutter(country);
+        var country = ClutterTool.removeBrackets(
+          list[ClutterTool.randomNumber(0, list.length)].name
+        );
+        var clutteredCountry = ClutterTool.removeBrackets(
+          ClutterTool.clutter(country)
+        );
+
         component.country = country;
         component.clutteredCountry = clutteredCountry;
         component.totalWords.push(country);
