@@ -176,7 +176,7 @@ export default {
       if (size <= 350) {
         res = "sm";
       } else if (350 < size && size <= 450) {
-        res = "Default";
+        res = "md";
       } else {
         res = "lg";
       }
