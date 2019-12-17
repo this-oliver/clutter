@@ -1,0 +1,26 @@
+[
+  {
+    "name": "earth",
+    "item": "&#127757;"
+  },
+  {
+    "name": "first_place",
+    "item": "&#129351;"
+  },
+  {
+    "name": "second_place",
+    "item": "&#129352;"
+  },
+  {
+    "name": "third_place",
+    "item": "&#129353;"
+  },
+  {
+    "name": "score",
+    "item": "&#127941;"
+  },
+  {
+    "name": "timer",
+    "item": "&#9201;"
+  }
+]
