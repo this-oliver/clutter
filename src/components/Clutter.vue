@@ -305,7 +305,7 @@ export default {
 <style scoped>
 /* scoreboard */
 #scoreboard {
-  margin-top: 10vh;
+  margin-top: 5vh;
   padding: 1vh 1vw;
 }
 
@@ -322,22 +322,23 @@ export default {
 
 /* word */
 #word {
-  margin-top: 10vh;
   padding: 1vh 1vw;
 
   font-size: 5em;
 }
 
 #output {
-  margin: 2.5vh 0vw;
+  margin: 2vh 0vw;
   padding: 1vh 1.5vw;
   border-radius: 25px;
   background-color: rgba(0, 0, 0, 0.247);
+
+  text-size-adjust: auto;
 }
 
 /* options */
 #buttons {
-  margin-top: 10vh;
+  margin-top: 5vh;
   padding: 1vh 1vw;
 }
 
