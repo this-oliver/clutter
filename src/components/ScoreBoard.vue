@@ -5,6 +5,7 @@
         <b-col>
           <b-modal
             id="scoreboard"
+            title="Scoreboard"
             :size="this.getScreenSize"
             :header-bg-variant="headerBgVariant"
             :header-text-variant="headerTextVariant"
@@ -17,22 +18,27 @@
             <b-media-body>
               <b-container fluid>
                 <b-row>
-                  <b-col cols="2" id="totalCorrectWords">
+                  <b-col cols="3" id="totalCorrectWords">
                     Total
                     <hr />
                     {{totalScore}}/{{totalWords}}
                   </b-col>
-                  <b-col cols="2" id="totalWords">
+                  <b-col cols="3" id="totalWords">
                     Accuracy
                     <hr />
                     {{getUserAccuracy}}%
                   </b-col>
-                  <b-col cols="6" offset="1" id="totalIncorrectWords">
+                  <b-col cols="6" id="totalIncorrectWords">
                     Missed words
                     <hr />
                     <ol>
                       <li v-for="word in totalIncorrectWords" :key="word">{{word}}</li>
                     </ol>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col id="highscores">
+                    <b-table :items="highscores"></b-table>
                   </b-col>
                 </b-row>
               </b-container>
@@ -45,9 +51,12 @@
 </template>
 
 <script>
+import UserController from "./../controllers/Users";
 export default {
   data: function() {
     return {
+      //highscore
+      highscores: [],
       //styling
       headerBgVariant: "dark",
       headerTextVariant: "light",
@@ -83,6 +92,11 @@ export default {
     }
   },
   methods: {
+    fetchHighScores: function() {
+      UserController.fetchHighScores().then(function(players) {
+        this.highscores = players;
+      });
+    },
     //other
     fetchScreenSize: function() {
       this.screenSize = { width: screen.width, height: screen.height };
@@ -90,9 +104,25 @@ export default {
   },
   beforeMount: function() {
     this.fetchScreenSize();
+    this.fetchHighScores();
   }
 };
 </script>
 
 <style>
+#totalCorrectWords {
+  background-color: #0bb302;
+}
+#totalWords {
+  background-color: #7a91ff;
+}
+#totalIncorrectWords {
+  background-color: #ffef40;
+  color: black;
+}
+
+#highscores {
+  background-color: #b26fda;
+  color: black;
+}
 </style>
