@@ -2,13 +2,17 @@
   <div>
     <b-container fluid>
       <!-- timer -->
-      <b-row id="scoreboard">
+      <b-row id="scoreboard" v-if="gameState.started">
         <b-col cols="8" id="timer">
-          <p v-if="gameState.started != true">60 Seconds</p>
-          <p v-else>&#9201; {{showTime}}</p>
+          <p>&#9201; {{showTime}}</p>
         </b-col>
-        <b-col v-if="gameState.started" cols="4" id="score">
+        <b-col cols="4" id="score">
           <p>{{gameState.score}} &#127941;</p>
+        </b-col>
+      </b-row>
+      <b-row id="countdown" v-else>
+        <b-col>
+          <p>{{gameState.countdown}}</p>
         </b-col>
       </b-row>
       <!-- word -->
@@ -30,12 +34,6 @@
         <b-col>
           <b-button-toolbar>
             <b-button-group>
-              <b-button
-                variant="primary"
-                :disabled="gameState.started"
-                @click="startGame"
-                :size="this.getScreenSize"
-              >Start</b-button>
               <b-button
                 variant="warning"
                 v-if="gameState.started"
@@ -106,6 +104,7 @@ export default {
         hintText: "",
         //time
         timer: 60,
+        countdown: 3,
         timerObject: null,
         //score
         score: 0,
@@ -115,6 +114,7 @@ export default {
       rules: {
         maxTime: 60,
         maxHintTime: 3000,
+        maxCountdown: 3000,
         maxMistakes: 3
       },
       //other
@@ -140,6 +140,17 @@ export default {
   },
   methods: {
     //rules
+    startCountdown: function() {
+      var component = this;
+      this.gameState.timerObject = setInterval(function() {
+        component.gameState.countdown--;
+        if (component.gameState.countdown == 0) {
+          clearInterval(component.gameState.timerObject);
+          component.countdown = component.maxCountdown;
+          component.startGame();
+        }
+      }, 1000);
+    },
     startGame: function() {
       this.gameState.started = true;
       this.fetchRandomCountry();
@@ -233,8 +244,14 @@ export default {
       this.screenSize = { width: screen.width, height: screen.height };
     }
   },
+  mounted: function() {
+    this.startCountdown();
+  },
   beforeMount: function() {
     this.fetchScreenSize();
+  },
+  beforeDestroy: function() {
+    this.restart();
   }
 };
 </script>
@@ -256,6 +273,13 @@ export default {
   font-weight: bold;
   font-size: 4em;
   text-align: end;
+}
+
+#countdown {
+  font-weight: bold;
+  font-size: 15em;
+  text-align: center;
+  margin-top: 20vh;
 }
 
 /* options */

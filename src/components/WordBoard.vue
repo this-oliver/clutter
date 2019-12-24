@@ -2,7 +2,7 @@
   <div>
     <b-row id="word">
       <b-col>
-        <div id="output">
+        <div id="output" v-if="gameState.started == true">
           <b-row id="clutter">
             <b-col>{{words.clutteredCountry}}</b-col>
           </b-row>
