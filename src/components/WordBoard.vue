@@ -128,6 +128,10 @@ export default {
   text-size-adjust: auto;
 }
 
+#hint {
+  color: white;
+}
+
 @media only screen and (max-width: 600px) {
   #word {
     font-size: 2.5em;

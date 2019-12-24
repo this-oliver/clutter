@@ -38,7 +38,7 @@
                 </b-row>
                 <b-row>
                   <b-col id="highscores">
-                    <b-table :items="highscores"></b-table>
+                    <b-table :items="getHighScores"></b-table>
                   </b-col>
                 </b-row>
               </b-container>
@@ -75,16 +75,20 @@ export default {
     "gameFinished"
   ],
   computed: {
-    getHighScore: function() {
+    getHighScores: function() {
       var res = [];
       this.highscores.forEach(player => {
         var item = {
           username: player.username,
           score: player.score,
-          accuracy: player.accuracy,
-          date: player.created
+          accuracy: player.accuracy
         };
+        res.push(item);
       });
+      res.sort(function(a, b) {
+        return b.score - a.score;
+      });
+      return res.slice(0, 5);
     },
     getUserAccuracy: function() {
       return Math.ceil((this.totalScore / this.totalWords) * 100);

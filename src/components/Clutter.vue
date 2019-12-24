@@ -114,6 +114,7 @@ export default {
       //game rules
       rules: {
         maxTime: 60,
+        maxHintTime: 3000,
         maxMistakes: 3
       },
       //other
@@ -207,7 +208,7 @@ export default {
           this.gameState.hintsLeft--;
         }
         this.gameState.hint = true;
-        this.gameState.hintsLeft = "";
+        this.gameState.hintText = "";
         for (let i = 0; i < this.words.country.length; i++) {
           var char = this.words.country[i].toLowerCase();
           if (
@@ -217,12 +218,12 @@ export default {
             char == "o" ||
             char == "u"
           ) {
-            this.gameState.hintsLeft += ".";
+            this.gameState.hintText += "*";
           } else {
-            this.gameState.hintsLeft += char;
+            this.gameState.hintText += char;
           }
         }
-        setTimeout(this.giveHint, 500);
+        setTimeout(this.giveHint, this.rules.maxHintTime);
       } else {
         this.gameState.hint = false;
       }
