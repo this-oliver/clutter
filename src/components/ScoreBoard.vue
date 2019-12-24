@@ -36,11 +36,6 @@
                     </ol>
                   </b-col>
                 </b-row>
-                <b-row>
-                  <b-col id="highscores">
-                    <b-table :items="getHighScores"></b-table>
-                  </b-col>
-                </b-row>
               </b-container>
             </b-media-body>
           </b-modal>
@@ -53,6 +48,7 @@
 <script>
 import UserController from "./../controllers/Users";
 export default {
+  name: "scoreboard",
   data: function() {
     return {
       //highscore
@@ -125,7 +121,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #totalCorrectWords {
   background-color: #0bb302;
 }

@@ -71,7 +71,7 @@
 
 <script>
 export default {
-  name: "WordBoard",
+  name: "wordboard",
   data: function() {
     return {
       input: ""

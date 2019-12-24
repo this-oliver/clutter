@@ -4,7 +4,7 @@
       <!-- timer -->
       <b-row id="scoreboard">
         <b-col cols="8" id="timer">
-          <p v-if="gameState.started != true">Countdown</p>
+          <p v-if="gameState.started != true">60 Seconds</p>
           <p v-else>&#9201; {{showTime}}</p>
         </b-col>
         <b-col v-if="gameState.started" cols="4" id="score">
@@ -81,7 +81,7 @@ import WordBoard from "./WordBoard";
 import Scoreboard from "./ScoreBoard";
 
 export default {
-  name: "Canvas",
+  name: "clutter",
   components: {
     WordBoard,
     Scoreboard
