@@ -2,80 +2,31 @@
   <div>
     <b-container fluid>
       <!-- timer -->
-      <b-row id="scoreboard">
+      <b-row id="scoreboard" v-if="gameState.started">
         <b-col cols="8" id="timer">
-          <p v-if="this.gameStarted != true">Countdown</p>
-          <p v-else>&#9201; {{showTime}}</p>
+          <p>&#9201; {{showTime}}</p>
         </b-col>
-        <b-col v-if="gameStarted" cols="4" id="score">
-          <p>{{score}} &#127941;</p>
+        <b-col cols="4" id="score">
+          <p>{{gameState.score}} &#127941;</p>
+        </b-col>
+      </b-row>
+      <b-row id="countdown" v-else>
+        <b-col>
+          <p>{{gameState.countdown}}</p>
         </b-col>
       </b-row>
       <!-- word -->
-      <b-row id="word">
+      <b-row>
         <b-col>
-          <div id="output">
-            <b-row id="clutter">
-              <b-col>{{clutteredCountry}}</b-col>
-            </b-row>
-            <b-row id="hint" v-if="hint">
-              <b-col>
-                <b-col>{{hintText}}</b-col>
-              </b-col>
-            </b-row>
-          </div>
-          <div id="input">
-            <b-row v-if="gameStarted">
-              <b-col>
-                <b-form-group>
-                  <b-input-group>
-                    <b-form-input
-                      :size="this.getScreenSize"
-                      :disabled="gameFinished"
-                      v-model="userInput"
-                      v-on:keyup.enter="checkAnswer"
-                    ></b-form-input>
-                    <b-input-group-append v-if="this.getScreenSize == 'lg'">
-                      <b-button
-                        :size="this.getScreenSize"
-                        text="Button"
-                        variant="success"
-                        :disabled="gameFinished"
-                        @click="checkAnswer"
-                      >Take a Guess</b-button>
-                    </b-input-group-append>
-                    <b-input-group-append v-if="this.getScreenSize == 'lg'">
-                      <b-button
-                        :size="this.getScreenSize"
-                        text="Button"
-                        variant="warning"
-                        :disabled="gameFinished"
-                        @click="skipAnswer"
-                      >Skip</b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                  <b-form-group v-if="this.getScreenSize != 'lg'" label-cols-sm="12">
-                    <b-button-group>
-                      <b-button
-                        :size="this.getScreenSize"
-                        text="Button"
-                        variant="success"
-                        :disabled="gameFinished"
-                        @click="checkAnswer"
-                      >Guess</b-button>
-                      <b-button
-                        :size="this.getScreenSize"
-                        text="Button"
-                        variant="warning"
-                        :disabled="gameFinished"
-                        @click="skipAnswer"
-                      >Skip</b-button>
-                    </b-button-group>
-                  </b-form-group>
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </div>
+          <WordBoard
+            v-bind:words="words"
+            v-bind:rules="rules"
+            v-bind:gameState="gameState"
+            v-bind:screenSize="getScreenSize"
+            v-on:skipAnswer="skipAnswer"
+            v-on:increaseScore="increaseScore"
+            v-on:increaseMistake="increaseMistake"
+          />
         </b-col>
       </b-row>
       <!-- buttons -->
@@ -84,23 +35,17 @@
           <b-button-toolbar>
             <b-button-group>
               <b-button
-                variant="primary"
-                :disabled="gameStarted"
-                @click="startGame"
-                :size="this.getScreenSize"
-              >Start</b-button>
-              <b-button
                 variant="warning"
-                v-if="gameStarted"
+                v-if="gameState.started"
                 @click="giveHint"
                 :size="this.getScreenSize"
               >
                 Hint
-                <b-badge variant="light">{{hintsLeft}}</b-badge>
+                <b-badge variant="light">{{gameState.hintsLeft}}</b-badge>
               </b-button>
               <b-button
                 variant="danger"
-                v-if="gameStarted"
+                v-if="gameState.started"
                 @click="restart"
                 :size="this.getScreenSize"
               >Restart</b-button>
@@ -112,11 +57,12 @@
       <b-row class="justify-content-md-center" id="scoreboard">
         <b-col>
           <Scoreboard
-            :totalScore="this.score"
-            :totalWords="this.totalWords.length"
-            :totalCorrectWords="this.totalCorrectWords"
-            :totalIncorrectWords="this.totalIncorrectWords"
-            :gameFinished="this.gameFinished"
+            :totalScore="this.gameState.score"
+            :totalWords="this.words.totalWords.length"
+            :totalCorrectWords="this.words.totalCorrectWords"
+            :totalIncorrectWords="this.words.totalIncorrectWords"
+            :gameFinished="gameState.finished"
+            v-on:reset="restart"
           />
         </b-col>
       </b-row>
@@ -130,43 +76,55 @@ import CountryController from "./../controllers/Country";
 import ClutterTool from "./../helpers/Clutter";
 
 //components
+import WordBoard from "./WordBoard";
 import Scoreboard from "./ScoreBoard";
 
 export default {
-  name: "Canvas",
+  name: "clutter",
   components: {
+    WordBoard,
     Scoreboard
   },
   data: function() {
     return {
       //word related
-      country: "clutter",
-      clutteredCountry: "clutter",
+      words: {
+        country: "clutter",
+        clutteredCountry: "clutter",
+        totalWords: [],
+        totalCorrectWords: [],
+        totalIncorrectWords: []
+      },
       //game state
-      gameStarted: false,
-      gameFinished: false,
-      hint: false,
-      hintsLeft: 3,
-      hintText: "",
-      timerObject: null,
-      //user
-      score: 0,
-      userInput: "",
-      totalWords: [],
-      totalCorrectWords: [],
-      totalIncorrectWords: [],
-      mistakes: 0,
+      gameState: {
+        started: false,
+        finished: false,
+        //hint
+        hint: false,
+        hintsLeft: 3,
+        hintText: "",
+        //time
+        timer: 60,
+        countdown: 3,
+        timerObject: null,
+        //score
+        score: 0,
+        mistakes: 0
+      },
       //game rules
-      timer: 60,
-      gameTime: 60,
-      maxMistakes: 3,
+      rules: {
+        maxTime: 60,
+        maxHintTime: 3000,
+        maxCountdown: 3000,
+        maxMistakes: 3
+      },
       //other
       screenSize: { width: screen.width, height: screen.height }
     };
   },
   computed: {
     showTime: function() {
-      return this.timer;
+      return this.gameState.timer;
     },
     getScreenSize: function() {
       var size = this.screenSize.width;
@@ -183,18 +141,29 @@ export default {
   },
   methods: {
     //rules
+    startCountdown: function() {
+      var component = this;
+      this.gameState.timerObject = setInterval(function() {
+        component.gameState.countdown--;
+        if (component.gameState.countdown == 0) {
+          clearInterval(component.gameState.timerObject);
+          component.countdown = component.maxCountdown;
+          component.startGame();
+        }
+      }, 1000);
+    },
     startGame: function() {
-      this.gameStarted = true;
+      this.gameState.started = true;
       this.fetchRandomCountry();
       this.startTimer();
     },
     startTimer: function() {
       var component = this;
-      this.timerObject = setInterval(function() {
-        component.timer--;
-        if (component.timer == 0) {
-          clearInterval(component.timerObject);
-          component.gameFinished = true;
+      this.gameState.timerObject = setInterval(function() {
+        component.gameState.timer--;
+        if (component.gameState.timer == 0) {
+          clearInterval(component.gameState.timerObject);
+          component.gameState.finished = true;
         }
       }, 1000);
     },
@@ -208,71 +177,54 @@ export default {
           ClutterTool.clutter(country)
         );
 
-        component.country = country;
-        component.clutteredCountry = clutteredCountry;
-        component.totalWords.push(country);
+        component.words.country = country;
+        component.words.clutteredCountry = clutteredCountry;
+        component.words.totalWords.push(country);
       });
     },
-    decreaseScore: function() {
-      if (this.score < 0) {
-        this.score--;
-      }
+    increaseScore: function() {
+      this.gameState.score++;
+      this.words.totalCorrectWords.push(this.words.country);
+      this.fetchRandomCountry();
+    },
+    increaseMistake: function() {
+      this.gameState.mistakes++;
     },
     //option
     restart: function() {
       //country
-      this.country = "clutter";
-      this.clutteredCountry = "clutter";
-      this.totalWords = [];
+      this.words.country = "clutter";
+      this.words.clutteredCountry = "clutter";
+      this.words.totalWords = [];
       //user
-      this.score = 0;
-      this.mistakes = 0;
-      this.userInput = "";
-      this.totalWords = [];
-      this.totalCorrectWords = [];
-      this.totalIncorrectWords = [];
+      this.gameState.score = 0;
+      this.gameState.mistake = 0;
+      this.words.totalWords = [];
+      this.words.totalCorrectWords = [];
+      this.words.totalIncorrectWords = [];
       //state
-      this.gameStarted = false;
-      this.gameFinished = false;
-      this.timer = this.gameTime;
-      clearInterval(this.timerObject);
-    },
-    checkAnswer: function() {
-      if (
-        this.userInput.toLowerCase().toString() ==
-        this.country.toLowerCase().toString()
-      ) {
-        this.score++;
-        this.userInput = "";
-        this.totalCorrectWords.push(this.country);
-        this.fetchRandomCountry();
-      } else {
-        this.mistakes++;
-        this.userInput = "";
-        if (this.mistakes % this.maxMistakes == 0) {
-          this.totalIncorrectWords.push(this.country);
-          this.fetchRandomCountry();
-          this.decreaseScore();
-        }
-      }
+      this.gameState.started = false;
+      this.gameState.finished = false;
+      this.gameState.timer = this.rules.maxTime;
+      clearInterval(this.gameState.timerObject);
+      this.gameState.countdown = 3;
+      this.startCountdown();
     },
     skipAnswer: function() {
-      this.totalIncorrectWords.push(this.country);
-      this.userInput = "";
-      this.decreaseScore();
+      this.words.totalIncorrectWords.push(this.words.country);
       this.fetchRandomCountry();
     },
     giveHint: function() {
-      if (this.hint == false) {
-        if (this.hintsLeft == 0) {
+      if (this.gameState.hint == false) {
+        if (this.gameState.hintsLeft == 0) {
           return;
         } else {
-          this.hintsLeft--;
+          this.gameState.hintsLeft--;
         }
-        this.hint = true;
-        this.hintText = "";
-        for (let i = 0; i < this.country.length; i++) {
-          var char = this.country[i].toLowerCase();
+        this.gameState.hint = true;
+        this.gameState.hintText = "";
+        for (let i = 0; i < this.words.country.length; i++) {
+          var char = this.words.country[i].toLowerCase();
           if (
             char == "a" ||
             char == "e" ||
@@ -280,14 +232,14 @@ export default {
             char == "o" ||
             char == "u"
           ) {
-            this.hintText += ".";
+            this.gameState.hintText += "*";
           } else {
-            this.hintText += char;
+            this.gameState.hintText += char;
           }
         }
-        setTimeout(this.giveHint, 500);
+        setTimeout(this.giveHint, this.rules.maxHintTime);
       } else {
-        this.hint = false;
+        this.gameState.hint = false;
       }
     },
     //other
@@ -295,8 +247,14 @@ export default {
       this.screenSize = { width: screen.width, height: screen.height };
     }
   },
+  mounted: function() {
+    this.startCountdown();
+  },
   beforeMount: function() {
     this.fetchScreenSize();
+  },
+  beforeDestroy: function() {
+    this.restart();
   }
 };
 </script>
@@ -320,25 +278,16 @@ export default {
   text-align: end;
 }
 
-/* word */
-#word {
-  padding: 1vh 1vw;
-
-  font-size: 5em;
-}
-
-#output {
-  margin: 2vh 0vw;
-  padding: 1vh 1.5vw;
-  border-radius: 25px;
-  background-color: rgba(0, 0, 0, 0.247);
-
-  text-size-adjust: auto;
+#countdown {
+  font-weight: bold;
+  font-size: 15em;
+  text-align: center;
+  margin-top: 20vh;
 }
 
 /* options */
 #buttons {
-  margin-top: 5vh;
+  margin-top: 3vh;
   padding: 1vh 1vw;
 }
 
@@ -352,10 +301,6 @@ export default {
     font-size: 2em;
     font-weight: bold;
   }
-
-  #word {
-    font-size: 2.5em;
-  }
 }
 
 @media only screen and (max-width: 350) {
@@ -367,10 +312,6 @@ export default {
   #score {
     font-size: 1em;
     font-weight: bold;
-  }
-
-  #word {
-    font-size: 1.5em;
   }
 }
 </style>

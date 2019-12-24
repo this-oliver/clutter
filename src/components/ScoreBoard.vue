@@ -4,7 +4,7 @@
       <b-row>
         <b-col>
           <b-modal
-            id="scoreboard"
+            ref="scoreboard"
             title="Scoreboard"
             :size="this.getScreenSize"
             :header-bg-variant="headerBgVariant"
@@ -36,13 +36,37 @@
                     </ol>
                   </b-col>
                 </b-row>
-                <b-row>
-                  <b-col id="highscores">
-                    <b-table :items="highscores"></b-table>
-                  </b-col>
-                </b-row>
               </b-container>
             </b-media-body>
+            <template v-slot:modal-footer="{ ok, cancel, hide }">
+              <b-button variant="warning" @click="cancel()">Cancel</b-button>
+              <b-button variant="success" @click="postHighscore=true">Post Score</b-button>
+            </template>
+          </b-modal>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-modal
+            ref="postHighScore"
+            title="Post Highscore"
+            :header-bg-variant="headerBgVariant"
+            :header-text-variant="headerTextVariant"
+            :visible="postHighscore"
+          >
+            <b-form-group
+              description="This is the username that will be shown near your highscore. (ps: it'd be cool if you used your ig tag 🤠)"
+            >
+              <b-form-input v-model="username" placeholder="Enter your username"></b-form-input>
+            </b-form-group>
+            <p
+              v-if="invalidUsername"
+              style="color:red;"
+            >the username you picked has already been chosen by another player</p>
+            <template v-slot:modal-footer="{ ok, cancel }">
+              <b-button variant="warning" @click="cancel()">Cancel</b-button>
+              <b-button variant="success" @click="uploadHighscore">Post Score</b-button>
+            </template>
           </b-modal>
         </b-col>
       </b-row>
@@ -53,10 +77,14 @@
 <script>
 import UserController from "./../controllers/Users";
 export default {
+  name: "scoreboard",
   data: function() {
     return {
       //highscore
       highscores: [],
+      postHighscore: false,
+      username: "",
+      invalidUsername: false,
       //styling
       headerBgVariant: "dark",
       headerTextVariant: "light",
@@ -75,6 +103,21 @@ export default {
     "gameFinished"
   ],
   computed: {
+    getHighScores: function() {
+      var res = [];
+      this.highscores.forEach(player => {
+        var item = {
+          username: player.username,
+          score: player.score,
+          accuracy: player.accuracy
+        };
+        res.push(item);
+      });
+      res.sort(function(a, b) {
+        return b.score - a.score;
+      });
+      return res.slice(0, 5);
+    },
     getUserAccuracy: function() {
       return Math.ceil((this.totalScore / this.totalWords) * 100);
     },
@@ -93,9 +136,36 @@ export default {
   },
   methods: {
     fetchHighScores: function() {
+      var parent = this;
       UserController.fetchHighScores().then(function(players) {
-        this.highscores = players;
+        parent.highscores = players;
       });
+    },
+    uploadHighscore: function() {
+      var component = this;
+      var now = new Date();
+      var validName = this.verifyName();
+      if (validName) {
+        UserController.postHighScore(
+          this.username,
+          this.totalScore,
+          this.getUserAccuracy,
+          now
+        );
+        this.$router.push("highscore");
+      } else {
+      }
+    },
+    verifyName: function() {
+      var name = this.username.replace(/ /g, "");
+      var unique = true;
+      this.highscores.forEach(user => {
+        if (user.username == name) {
+          unique = false;
+        }
+      });
+      this.invalidUsername = true;
+      return unique;
     },
     //other
     fetchScreenSize: function() {
@@ -109,7 +179,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #totalCorrectWords {
   background-color: #0bb302;
 }
