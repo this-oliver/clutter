@@ -9,7 +9,7 @@
               <b-navbar-nav>
                 <b-nav-item to="/" class="navigationItem">🏠 Home</b-nav-item>
                 <b-nav-item to="/clutter" class="navigationItem">🎮 Game</b-nav-item>
-                <b-nav-item to="/highscores" class="navigationItem">🏆 Highscores</b-nav-item>
+                <b-nav-item to="/highscore" class="navigationItem">🏆 Highscores</b-nav-item>
               </b-navbar-nav>
             </b-collapse>
           </b-navbar>
