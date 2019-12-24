@@ -75,6 +75,17 @@ export default {
     "gameFinished"
   ],
   computed: {
+    getHighScore: function() {
+      var res = [];
+      this.highscores.forEach(player => {
+        var item = {
+          username: player.username,
+          score: player.score,
+          accuracy: player.accuracy,
+          date: player.created
+        };
+      });
+    },
     getUserAccuracy: function() {
       return Math.ceil((this.totalScore / this.totalWords) * 100);
     },
@@ -93,8 +104,9 @@ export default {
   },
   methods: {
     fetchHighScores: function() {
+      var parent = this;
       UserController.fetchHighScores().then(function(players) {
-        this.highscores = players;
+        parent.highscores = players;
       });
     },
     //other
