@@ -3,7 +3,7 @@
     <b-row id="title">
       <b-col>Clutter</b-col>
     </b-row>
-    <b-row id="subtitle" align-h="center">
+    <b-row id="subtitle">
       <b-col>
         🤠
         <a href="https://www.instagram.com/this.oliver/">Olivier Manzi</a>
@@ -50,7 +50,7 @@ export default {};
 #subtitle {
   font-size: 2em;
   font-weight: bold;
-  text-align: center;
+  margin-left: 1.5vw;
 
   color: white;
 }
@@ -60,7 +60,11 @@ export default {};
 }
 
 #button-groups {
-  margin: 10vh 1vw 0 1vw;
+  margin: 5vh 1vw 0 1vw;
+}
+
+#button-groups p {
+  font-size: 3em;
 }
 
 #howto {
@@ -68,7 +72,7 @@ export default {};
   font-weight: 800;
   color: white;
 
-  border: 5px solid grey;
+  border: 5px solid orange;
   border-radius: 10px;
   margin: 5vh 1vw 0 1vw;
   padding: 1vh 1vw;
