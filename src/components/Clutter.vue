@@ -62,6 +62,7 @@
             :totalCorrectWords="this.words.totalCorrectWords"
             :totalIncorrectWords="this.words.totalIncorrectWords"
             :gameFinished="gameState.finished"
+            v-on:reset="restart"
           />
         </b-col>
       </b-row>
@@ -206,6 +207,8 @@ export default {
       this.gameState.finished = false;
       this.gameState.timer = this.rules.maxTime;
       clearInterval(this.gameState.timerObject);
+      this.gameState.countdown == this.rules.maxCountdown;
+      this.startCountdown();
     },
     skipAnswer: function() {
       this.words.totalIncorrectWords.push(this.words.country);

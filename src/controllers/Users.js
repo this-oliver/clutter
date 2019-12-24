@@ -16,12 +16,12 @@ const fetchHighScores = function() {
   });
 };
 
-const postHighScore = function(username, score, accuracy, created) {
+const postHighScore = function(username, score, accuracy, date) {
   var player = {
     username: username,
     score: score,
     accuracy: accuracy,
-    created: created
+    created: date
   };
 
   axios
@@ -29,6 +29,7 @@ const postHighScore = function(username, score, accuracy, created) {
     .then(function(response) {
       console.log("posted!");
       console.log({ res: response });
+      return response;
     })
     .catch(function(error) {
       console.log({ error: error });

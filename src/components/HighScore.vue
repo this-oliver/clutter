@@ -71,6 +71,9 @@ export default {
   },
   beforeMount: function() {
     this.fetchHighScores();
+  },
+  mounted: function() {
+    this.fetchHighScores();
   }
 };
 </script>

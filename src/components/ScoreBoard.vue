@@ -4,7 +4,7 @@
       <b-row>
         <b-col>
           <b-modal
-            id="scoreboard"
+            ref="scoreboard"
             title="Scoreboard"
             :size="this.getScreenSize"
             :header-bg-variant="headerBgVariant"
@@ -38,6 +38,31 @@
                 </b-row>
               </b-container>
             </b-media-body>
+            <template v-slot:modal-footer="{ ok, cancel, hide }">
+              <b-button variant="warning" @click="cancel()">Cancel</b-button>
+              <b-button variant="success" @click="postHighscore=true">Post Score</b-button>
+            </template>
+          </b-modal>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-modal
+            ref="postHighScore"
+            title="Post Highscore"
+            :header-bg-variant="headerBgVariant"
+            :header-text-variant="headerTextVariant"
+            :visible="postHighscore"
+          >
+            <b-form-group
+              description="This is the username that will be shown near your highscore. (ps: it'd be cool if you used your ig tag 🤠)"
+            >
+              <b-form-input v-model="username" placeholder="Enter your username"></b-form-input>
+            </b-form-group>
+            <template v-slot:modal-footer="{ ok, cancel }">
+              <b-button variant="warning" @click="cancel()">Cancel</b-button>
+              <b-button variant="success" @click="uploadHighscore">Post Score</b-button>
+            </template>
           </b-modal>
         </b-col>
       </b-row>
@@ -53,6 +78,8 @@ export default {
     return {
       //highscore
       highscores: [],
+      postHighscore: false,
+      username: "",
       //styling
       headerBgVariant: "dark",
       headerTextVariant: "light",
@@ -108,6 +135,17 @@ export default {
       UserController.fetchHighScores().then(function(players) {
         parent.highscores = players;
       });
+    },
+    uploadHighscore: function() {
+      var component = this;
+      var now = new Date();
+      UserController.postHighScore(
+        this.username,
+        this.totalScore,
+        this.getUserAccuracy,
+        now
+      );
+      this.$router.push("highscore");
     },
     //other
     fetchScreenSize: function() {
