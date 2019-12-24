@@ -1,7 +1,13 @@
 <template>
   <b-container fluid>
-    <b-row id="title" align-v="center">
+    <b-row id="title">
       <b-col>Clutter</b-col>
+    </b-row>
+    <b-row id="subtitle" align-h="center">
+      <b-col>
+        🤠
+        <a href="https://www.instagram.com/this.oliver/">Olivier Manzi</a>
+      </b-col>
     </b-row>
     <b-row id="button-groups">
       <b-col>
@@ -41,6 +47,18 @@ export default {};
   margin: 5vh 1vw 0 1vw;
 }
 
+#subtitle {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+
+  color: white;
+}
+
+#subtitle a:visited {
+  color: orange;
+}
+
 #button-groups {
   margin: 10vh 1vw 0 1vw;
 }
@@ -69,6 +87,10 @@ export default {};
     font-size: 5em;
   }
 
+  #subtitle {
+    font-size: 1em;
+  }
+
   #howto {
     font-size: 1em;
   }
@@ -77,6 +99,10 @@ export default {};
 @media only screen and (max-width: 600px) {
   #title {
     font-size: 5em;
+  }
+
+  #subtitle {
+    font-size: 1em;
   }
 
   #howto {

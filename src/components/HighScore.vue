@@ -6,12 +6,13 @@
     <b-row id="highscores">
       <b-col>
         <b-table
+          id="highscores"
           :items="highscores"
           :fields="highscoreFields"
           striped
+          sticky-header="500px"
           head-variant="dark"
           table-variant="light"
-          responsive="true"
           show-empty
         >
           <template v-slot:cell(created)="data">
@@ -88,6 +89,6 @@ export default {
 }
 
 #highscores {
-  padding: 1vh 0vw;
+  margin-bottom: 5vh;
 }
 </style>

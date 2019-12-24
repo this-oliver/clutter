@@ -104,7 +104,7 @@ export default {
         hintsLeft: 3,
         hintText: "",
         //time
-        timer: 1,
+        timer: 60,
         countdown: 3,
         timerObject: null,
         //score
@@ -207,7 +207,7 @@ export default {
       this.gameState.finished = false;
       this.gameState.timer = this.rules.maxTime;
       clearInterval(this.gameState.timerObject);
-      this.gameState.countdown == this.rules.maxCountdown;
+      this.gameState.countdown = 3;
       this.startCountdown();
     },
     skipAnswer: function() {
