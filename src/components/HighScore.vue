@@ -11,7 +11,7 @@
           striped
           head-variant="dark"
           table-variant="light"
-          responsive
+          responsive="true"
           show-empty
         >
           <template v-slot:cell(created)="data">
@@ -88,6 +88,6 @@ export default {
 }
 
 #highscores {
-  margin: 2vh 0vw;
+  padding: 1vh 0vw;
 }
 </style>

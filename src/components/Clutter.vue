@@ -104,7 +104,7 @@ export default {
         hintsLeft: 3,
         hintText: "",
         //time
-        timer: 60,
+        timer: 1,
         countdown: 3,
         timerObject: null,
         //score

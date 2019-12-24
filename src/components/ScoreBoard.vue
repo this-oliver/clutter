@@ -59,6 +59,10 @@
             >
               <b-form-input v-model="username" placeholder="Enter your username"></b-form-input>
             </b-form-group>
+            <p
+              v-if="invalidUsername"
+              style="color:red;"
+            >the username you picked has already been chosen by another player</p>
             <template v-slot:modal-footer="{ ok, cancel }">
               <b-button variant="warning" @click="cancel()">Cancel</b-button>
               <b-button variant="success" @click="uploadHighscore">Post Score</b-button>
@@ -80,6 +84,7 @@ export default {
       highscores: [],
       postHighscore: false,
       username: "",
+      invalidUsername: false,
       //styling
       headerBgVariant: "dark",
       headerTextVariant: "light",
@@ -139,13 +144,28 @@ export default {
     uploadHighscore: function() {
       var component = this;
       var now = new Date();
-      UserController.postHighScore(
-        this.username,
-        this.totalScore,
-        this.getUserAccuracy,
-        now
-      );
-      this.$router.push("highscore");
+      var validName = this.verifyName();
+      if (validName) {
+        UserController.postHighScore(
+          this.username,
+          this.totalScore,
+          this.getUserAccuracy,
+          now
+        );
+        this.$router.push("highscore");
+      } else {
+      }
+    },
+    verifyName: function() {
+      var name = this.username.replace(/ /g, "");
+      var unique = true;
+      this.highscores.forEach(user => {
+        if (user.username == name) {
+          unique = false;
+        }
+      });
+      this.invalidUsername = true;
+      return unique;
     },
     //other
     fetchScreenSize: function() {
