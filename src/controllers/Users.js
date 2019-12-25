@@ -2,7 +2,7 @@
 var axios = require("axios");
 var highscoreUrl =
   process.env.NODE_ENV == "production"
-    ? "https://clutter-api.herokuapp.com/highscores"
+    ? "http://clutter-api.herokuapp.com/highscores"
     : "http://localhost:8081/highscores";
 
 /**
