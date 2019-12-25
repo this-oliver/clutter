@@ -15,6 +15,17 @@
           table-variant="light"
           show-empty
         >
+          <template v-slot:cell(username)="data">
+            <b>@{{data.value}}</b>
+          </template>
+          <template v-slot:cell(score)="data">
+            {{data.value}}
+            <b>pts</b>
+          </template>
+          <template v-slot:cell(accuracy)="data">
+            {{data.value}}
+            <b>%</b>
+          </template>
           <template v-slot:cell(created)="data">
             {{data.value}}
             <b>hrs</b>
