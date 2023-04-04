@@ -22,7 +22,7 @@
     "mongodb": "^3.4.0",
     "vue": "^2.6.10",
     "vue-cookies": "^1.5.13",
-    "vue-resource": "^1.5.1",
+    "vue-resource": "^1.5.3",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
